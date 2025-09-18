@@ -259,7 +259,7 @@
                     model: "gemini-2.5-flash-preview-tts"
                 };
                 
-                const apiKey = "";
+                const apiKey = "AIzaSyA7UeU1kIC_0VF5HNCeEhrBkPFoeoIiC4o";
                 const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
 
                 const response = await fetch(apiUrl, {
@@ -269,7 +269,8 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`API chyba: ${response.statusText}`);
+                    const errorText = response.statusText || `Chyba ${response.status}`;
+                    throw new Error(`Volanie TTS API zlyhalo: ${errorText}`);
                 }
 
                 const result = await response.json();
@@ -308,13 +309,14 @@
                         playAlarm(wavBlob);
                     }, timeToAlarm);
                 } else {
-                    throw new Error('Nepodarilo sa získať zvukové dáta z API.');
+                    console.error("API vrátilo nečakanú odpoveď:", result);
+                    throw new Error('Nepodarilo sa získať zvukové dáta z API. Skontrolujte konzolu pre detaily.');
                 }
 
             } catch (error) {
                 loadingSpinner.style.display = 'none';
                 console.error("Chyba pri generovaní zvuku:", error);
-                showMessage(`Nastala chyba: ${error.message}. Skúste to prosím znova.`, true);
+                showMessage(`Nastala chyba pri vytváraní hlasovej správy: ${error.message}. Skúste to prosím znova.`, true);
             }
         }
 
@@ -344,3 +346,5 @@
     </script>
 </body>
 </html>
+
+
